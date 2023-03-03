@@ -77,5 +77,4 @@ jobs:
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest"
-            "${{ steps.meta.outputs.tags }}"
           labels: ${{ steps.meta.outputs.labels }}
