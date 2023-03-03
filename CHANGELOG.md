@@ -1,3 +1,9 @@
+## 0.2.1 (2023-03-03)
+
+### Fix
+
+- **pipeline**: Fixed environment on pipeline file
+
 ## 0.2.0 (2023-03-03)
 
 ### Feat
