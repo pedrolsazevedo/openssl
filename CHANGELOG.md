@@ -1,3 +1,9 @@
+## 0.2.7 (2023-03-03)
+
+### Fix
+
+- **GitHubAction**: Fixed output from bump job
+
 ## 0.2.6 (2023-03-03)
 
 ### Fix
