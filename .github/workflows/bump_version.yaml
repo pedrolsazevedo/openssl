@@ -38,11 +38,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     needs: bump_version
-    steps:
-      - env:
+    env:
           CZ_VERSION: ${{ needs.bump_version.outputs.bump_version }}
-        run: echo $CZ_VERSION
-
+    steps:
       - name: Print tag that will be used
         run: echo "v${{ env.CZ_VERSION }}"
 
