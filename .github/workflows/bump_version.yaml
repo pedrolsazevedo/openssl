@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     name: "Bump version and create changelog with commitizen"
+    outputs:
+      bump_version: ${{ steps.cz.outputs.version }}
     steps:
       - name: Check out
         uses: actions/checkout@v3
@@ -37,8 +39,11 @@ jobs:
     environment: release
     needs: bump_version
     steps:
+      - env:
+          CZ_VERSION: ${{ needs.bump_version.outputs.bump_version }}
+
       - name: Print tag that will be used
-        run: echo "v${{ jobs.bump_version.steps.cz.outputs.version }}"
+        run: echo "v${{ env.CZ_VERSION }}"
 
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -67,5 +72,5 @@ jobs:
           context: .
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: "v${{ jobs.bump_version.steps.cz.outputs.version }}" 
+          tags: "${{ env.CZ_VERSION }}"
           labels: ${{ steps.meta.outputs.labels }}
