@@ -65,6 +65,9 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
       
+      - name: Print metadata information
+        run: echo ${{ steps.meta.outputs }}
+      
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
