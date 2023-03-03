@@ -1,3 +1,9 @@
+## 0.2.0 (2023-03-03)
+
+### Feat
+
+- **openssl**: Modified Dockerfile image and create CI file
+
 ## 0.1.0 (2023-03-03)
 
 ### Feat
