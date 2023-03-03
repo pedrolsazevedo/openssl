@@ -1,3 +1,11 @@
+## 0.2.2 (2023-03-03)
+
+### Fix
+
+- **pipeline**: Fixed namespace and tags for docker push
+- **pipeline**: Fixed namespace and tags for docker push
+- **pipeline**: Fixed namespace and tags for docker push
+
 ## 0.2.1 (2023-03-03)
 
 ### Fix
