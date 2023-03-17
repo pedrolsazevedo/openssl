@@ -71,8 +71,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
-            ${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+            "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}"
+            "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}"
 
       
       - name: Print metadata information
@@ -87,4 +87,6 @@ jobs:
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest"
+            "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+            "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest"
           labels: ${{ steps.meta.outputs.labels }}
