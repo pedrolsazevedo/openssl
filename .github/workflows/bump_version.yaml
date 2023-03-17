@@ -71,8 +71,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-          quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
-           ${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+            quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+            ${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
 
       
       - name: Print metadata information
