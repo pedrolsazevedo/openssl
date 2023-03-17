@@ -70,7 +70,10 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+          images: |
+          quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+           ${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}
+
       
       - name: Print metadata information
         run: echo ${{ steps.meta.outputs }}
