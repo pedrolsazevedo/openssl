@@ -1,0 +1,21 @@
+# Define the base image and arguments
+ARG ALPINE_VERSION=3.17.3
+ARG OPENSSL_VERSION=3.0.8-r3
+FROM alpine:${ALPINE_VERSION} AS base
+ARG OPENSSL_VERSION
+
+# Install OpenSSL and clean up
+RUN apk update && apk upgrade --no-cache
+RUN apk add --no-cache openssl=${OPENSSL_VERSION} \
+  && rm -rf /var/cache/apk/*
+
+# Set the architecture-specific labels
+LABEL org.label-schema.architecture="amd64"
+LABEL org.label-schema.version=${OPENSSL_VERSION}
+LABEL org.label-schema.description="OpenSSL ${OPENSSL_VERSION} on Alpine ${ALPINE_VERSION} (amd64)"
+
+# Copy the README file
+COPY README.md /
+
+# Run the command to display the secret
+RUN --mount=type=secret,id=mysecret cat /run/secrets/mysecret

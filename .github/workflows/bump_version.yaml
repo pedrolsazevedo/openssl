@@ -77,12 +77,42 @@ jobs:
       
       - name: Print metadata information
         run: echo ${{ steps.meta.outputs }}
-      
-      - name: Build and push to Docker Hub
+
+      - name: Build and push arm64
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
+          file: Dockerfile.arm64
+          platforms: linux/arm64
+          tags: |
+            "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+            "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:arm64"
+            "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+            "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:arm64"
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build and push amd64
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          file: Dockerfile.amd64
+          platforms: linux/amd64
+          tags: |
+            "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+            "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:amd64"
+            "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+            "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:amd64"
+          labels: ${{ steps.meta.outputs.labels }}
+
+
+      - name: Build and push multi-arch
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          file: Dockerfile.multi
           platforms: linux/amd64,linux/arm64
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
