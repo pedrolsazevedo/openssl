@@ -1,3 +1,9 @@
+## 0.4.1 (2023-04-20)
+
+### Fix
+
+- **multiarch**: Fixed multiarch build
+
 ## 0.4.0 (2023-04-20)
 
 ### Feat
