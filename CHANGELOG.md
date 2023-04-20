@@ -1,3 +1,9 @@
+## 0.5.3 (2023-04-20)
+
+### Fix
+
+- **cicd**: Fixed map for build arguments
+
 ## 0.5.2 (2023-04-20)
 
 ### Fix
