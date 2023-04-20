@@ -1,5 +1,6 @@
+name: "Version Bump"
+
 on:
-  workflow_call: 
   push:
     branches:
       - main

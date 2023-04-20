@@ -2,10 +2,10 @@
 name: Commitizen Bump version
 
 on:
-  workflow_call: 
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Version Bump"]
+    types:
+      - completed
 
 env:
   IMAGE_NAMESPACE: "psazevedo"
@@ -66,8 +66,8 @@ jobs:
           file: Dockerfile.arm64
           platforms: linux/arm64
           build-args:
-            - ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
-            - OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
+            ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
+            OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}-arm64"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}-arm64"
@@ -83,8 +83,8 @@ jobs:
           file: Dockerfile.amd64
           platforms: linux/amd64
           build-args:
-            - ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
-            - OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
+            ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
+            OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}-amd64"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}-amd64"
@@ -100,8 +100,8 @@ jobs:
           file: Dockerfile.multi
           platforms: linux/amd64,linux/arm64
           build-args:
-            - ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
-            - OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
+            ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
+            OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest"
