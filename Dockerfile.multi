@@ -1,0 +1,27 @@
+# Define the base image and arguments
+ARG ALPINE_VERSION=3.17.3
+ARG OPENSSL_VERSION=3.0.8-r3
+
+FROM alpine:${ALPINE_VERSION} AS base
+ARG OPENSSL_VERSION
+# Install OpenSSL and clean up
+RUN apk update && apk upgrade --no-cache
+RUN apk add --no-cache openssl=${OPENSSL_VERSION} \
+  && rm -rf /var/cache/apk/*
+
+# Set multi-architecture labels
+LABEL org.label-schema.architecture="multi-platform"
+LABEL org.label-schema.version=${OPENSSL_VERSION}
+LABEL org.label-schema.description="OpenSSL ${OPENSSL_VERSION} on Alpine ${ALPINE_VERSION} (multi-platform)"
+
+# Create a manifest list to include both images
+FROM scratch AS manifest
+COPY --from=amd64 / /
+COPY --from=arm64 / /
+LABEL org.label-schema.architecture="multi-platform"
+LABEL org.label-schema.version=${OPENSSL_VERSION}
+LABEL org.label-schema.description="OpenSSL ${OPENSSL_VERSION} on Alpine ${ALPINE_VERSION} (multi-platform)"
+CMD [ "cat", "/README.md" ]
+
+# Use the manifest command to create a single image that can run on multiple architectures
+FROM manifest AS final
