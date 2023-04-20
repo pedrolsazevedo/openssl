@@ -9,6 +9,28 @@ RUN apk update && apk upgrade --no-cache
 RUN apk add --no-cache openssl=${OPENSSL_VERSION} \
   && rm -rf /var/cache/apk/*
 
+# Build the image for amd64 architecture
+FROM base AS amd64
+ARG OPENSSL_VERSION
+RUN echo "Building for amd64 architecture"
+RUN uname -m
+RUN openssl version
+LABEL org.label-schema.architecture="amd64"
+LABEL org.label-schema.version=${OPENSSL_VERSION}
+LABEL org.label-schema.description="OpenSSL ${OPENSSL_VERSION} on Alpine ${ALPINE_VERSION} (amd64)"
+COPY README.md /
+
+# Build the image for arm64 architecture
+FROM base AS arm64
+ARG OPENSSL_VERSION
+RUN echo "Building for arm64 architecture"
+RUN uname -m
+RUN openssl version
+LABEL org.label-schema.architecture="arm64"
+LABEL org.label-schema.version=${OPENSSL_VERSION}
+LABEL org.label-schema.description="OpenSSL ${OPENSSL_VERSION} on Alpine ${ALPINE_VERSION} (arm64)"
+COPY README.md /
+
 # Set multi-architecture labels
 LABEL org.label-schema.architecture="multi-platform"
 LABEL org.label-schema.version=${OPENSSL_VERSION}
