@@ -65,6 +65,9 @@ jobs:
           push: true
           file: Dockerfile.arm64
           platforms: linux/arm64
+          build-args:
+            - ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
+            - OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}-arm64"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}-arm64"
@@ -79,6 +82,9 @@ jobs:
           push: true
           file: Dockerfile.amd64
           platforms: linux/amd64
+          build-args:
+            - ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
+            - OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}-amd64"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}-amd64"
@@ -94,8 +100,8 @@ jobs:
           file: Dockerfile.multi
           platforms: linux/amd64,linux/arm64
           build-args:
-            - ALPINE_VERSION=3.17.3
-            - OPENSSL_VERSION=3.0.8-r3
+            - ALPINE_VERSION: ${{ env.ALPINE_VERSION }}
+            - OPENSSL_VERSION: ${{ env.OPENSSL_VERSION }}
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest"
