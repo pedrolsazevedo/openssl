@@ -1,3 +1,9 @@
+## 0.4.0 (2023-04-20)
+
+### Feat
+
+- **multiarch-build**: Added multiarch build files
+
 ## 0.3.2 (2023-03-17)
 
 ## 0.3.1 (2023-03-17)
