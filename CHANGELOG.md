@@ -1,3 +1,11 @@
+## 0.5.0 (2023-04-20)
+
+### Feat
+
+- **cicd**: Split the bump and cicd files, updated tags on build
+- **cicd**: Split the bump and cicd files, updated tags on build
+- **cicd**: Split the bump and cicd files, updated tags on build
+
 ## 0.4.1 (2023-04-20)
 
 ### Fix
