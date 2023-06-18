@@ -1,3 +1,11 @@
+## 0.8.0 (2023-06-18)
+
+### Feat
+
+- **cicd**: Returning the workflow to one file
+- **cicd**: Returning the workflow to one file
+- **cicd**: Returning the workflow to one file
+
 ## 0.7.0 (2023-06-18)
 
 ### Feat
