@@ -1,33 +1,50 @@
----
-name: OCI Image Build and Publish
+
+name: Commitizen Bump version
 
 on:
-  workflow_call:
-  workflow_run:
-    workflows: ["Commitizen Version Bump"]
+  workflow_call: 
+  push:
     branches:
       - main
-    types:
-      - completed
 
 env:
   IMAGE_NAMESPACE: "psazevedo"
   IMAGE_NAME: ${{ github.event.repository.name }}
-  ALPINE_VERSION: "3.17.3"
-  OPENSSL_VERSION: "3.0.8-r3"
 
 jobs:
-  push_to_registry:
-    name: Push Docker image to Docker Hub and Quay.io
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  bump_version:
+    if: "!startsWith(github.event.head_commit.message, 'bump:')"
     runs-on: ubuntu-latest
     environment: release
+    name: "Bump version and create changelog with commitizen"
+    outputs:
+      bump_version: ${{ steps.cz.outputs.version }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: "${{ secrets.GITHUB_TOKEN }}"
+      - id: cz
+        name: Create bump and changelog
+        uses: commitizen-tools/commitizen-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Print Version
+        run: echo "Bumped to version ${{ steps.cz.outputs.version }}"
+
+  push_to_registry:
+    name: Push Docker image to Docker Hub and Quay.io
+    runs-on: ubuntu-latest
+    environment: release
+    needs: bump_version
+
     env:
-      CZ_VERSION: ${{ github.ref }}
+      CZ_VERSION: ${{ needs.bump_version.outputs.bump_version }}
 
     steps:
       - name: Print tag that will be used
-        run: echo "v${{ github.ref }}"
+        run: echo "v${{ env.CZ_VERSION }}"
 
       - name: Check out the repo
         uses: actions/checkout@v3
@@ -58,7 +75,7 @@ jobs:
           images: |
             "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}"
-    
+
       - name: Print metadata information
         run: echo ${{ steps.meta.outputs }}
 
@@ -69,14 +86,11 @@ jobs:
       #     push: true
       #     file: Dockerfile.arm64
       #     platforms: linux/arm64
-      #     build-args: |
-      #         ALPINE_VERSION=${{ env.ALPINE_VERSION }}
-      #         OPENSSL_VERSION=${{ env.OPENSSL_VERSION }}
       #     tags: |
-      #       "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}-arm64"
-      #       "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}-arm64"
-      #       "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}-arm64"
-      #       "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}-arm64"
+      #       "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+      #       "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:arm64"
+      #       "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+      #       "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:arm64"
       #     labels: ${{ steps.meta.outputs.labels }}
 
       # - name: Build and push amd64
@@ -86,15 +100,13 @@ jobs:
       #     push: true
       #     file: Dockerfile.amd64
       #     platforms: linux/amd64
-      #     build-args: |
-      #         ALPINE_VERSION=${{ env.ALPINE_VERSION }}
-      #         OPENSSL_VERSION=${{ env.OPENSSL_VERSION }}
       #     tags: |
-      #       "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}-amd64"
-      #       "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}-amd64"
-      #       "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}-amd64"
-      #       "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}-amd64"
+      #       "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+      #       "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:amd64"
+      #       "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
+      #       "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:amd64"
       #     labels: ${{ steps.meta.outputs.labels }}
+
 
       - name: Build and push multi-arch
         uses: docker/build-push-action@v4
@@ -103,14 +115,9 @@ jobs:
           push: true
           file: Dockerfile.multi
           platforms: linux/amd64,linux/arm64
-          build-args: |
-              ALPINE_VERSION=${{ env.ALPINE_VERSION }}
-              OPENSSL_VERSION=${{ env.OPENSSL_VERSION }}
           tags: |
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
             "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest"
-            "${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}"
-            "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.OPENSSL_VERSION }}-alpine${{ env.ALPINE_VERSION }}"
             "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ env.CZ_VERSION }}"
             "quay.io/${{ env.IMAGE_NAMESPACE }}/${{ env.IMAGE_NAME }}:latest"
           labels: ${{ steps.meta.outputs.labels }}
