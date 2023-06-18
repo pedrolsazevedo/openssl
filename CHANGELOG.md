@@ -1,3 +1,10 @@
+## 0.6.0 (2023-06-18)
+
+### Feat
+
+- **cicd**: Added all instructions to one CI file
+- **cicd**: Added all instructions to one CI file
+
 ## 0.5.4 (2023-04-20)
 
 ### Fix
