@@ -1,3 +1,11 @@
+## 0.7.0 (2023-06-18)
+
+### Feat
+
+- **cicd**: Fixed workflow dependencies
+- **cicd**: Fixed workflow dependencies
+- **cicd**: Fixed workflow dependencies
+
 ## 0.6.0 (2023-06-18)
 
 ### Feat
