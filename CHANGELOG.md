@@ -1,3 +1,9 @@
+## 0.9.0 (2023-06-18)
+
+### Feat
+
+- **openssl**: Updated Openssl version from 3.0.8-r3 to 3.0.9-r1
+
 ## 0.8.0 (2023-06-18)
 
 ### Feat
